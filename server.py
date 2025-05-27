@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from pathlib import Path
 from mcp.server.fastmcp import FastMCP
-# Removed unused jugaad_data import
 
 # Initialize FastMCP server
 mcp = FastMCP("screener")
@@ -534,72 +533,6 @@ async def get_stock_data(stock_name: str) -> Dict:
     except Exception as e:
         return {"error": str(e)}
 
-@mcp.tool()
-def get_broker_data(broker_name: str = None, fetch_only_latest: bool = True) -> List[Dict[str, Any]]:
-    """Fetch broker data based on the provided parameters.
-
-    Args:
-        broker_name: Optional; Name of the broker to fetch data for. If not provided, fetches data for all brokers.
-        fetch_only_latest: Boolean; If True, fetches only the latest data for each broker. Defaults to True.
-
-    Returns:
-        A list of dictionaries containing broker data with keys: BrokerName, holdings, and dateTime.
-    """
-    import sqlite3
-    import requests
-    from datetime import datetime
-
-    api_url = "http://127.0.0.1:5000/printEverything/"
-    try:
-        response = requests.get(api_url, timeout=5)
-        response.raise_for_status()
-        api_data = response.json()
-
-        result = []
-        for broker, holdings in api_data.items():
-            if broker_name and broker != broker_name:
-                continue
-            result.append({
-                "BrokerName": broker,
-                "holdings": holdings,
-                "dateTime": datetime.now().isoformat()
-            })
-        return {
-            "source": "API",
-            "data": result if fetch_only_latest else result
-        }
-
-    except requests.RequestException:
-        db_path = "/Users/parulgarg/Documents/GitHub/masterBroker/PythonAPI/broker_data.db"
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
-
-        query = "SELECT BrokerName, holdings, dateTime FROM broker_data"
-        if broker_name:
-            query += " WHERE BrokerName = ?"
-            cursor.execute(query, (broker_name,))
-        else:
-            cursor.execute(query)
-
-        rows = cursor.fetchall()
-        conn.close()
-
-        if fetch_only_latest:
-            latest_data = {}
-            for broker, holdings, date_time in rows:
-                if broker not in latest_data or latest_data[broker]["dateTime"] < date_time:
-                    latest_data[broker] = {"holdings": holdings, "dateTime": date_time}
-            return {
-                "source": "DB",
-                "data": [{"BrokerName": broker, **data} for broker, data in latest_data.items()]
-            }
-        else:
-            return {
-                "source": "DB",
-                "data": [{"BrokerName": broker, "holdings": holdings, "dateTime": date_time} for broker, holdings, date_time in rows]
-            }
-            
-            
 
 @mcp.tool()
 async def fetch_live_price(ticker: str) -> str:

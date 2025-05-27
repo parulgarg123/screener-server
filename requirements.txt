@@ -2,4 +2,3 @@ httpx
 bs4
 mcp
 pathlib
-jugaad_data
