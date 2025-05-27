@@ -144,6 +144,9 @@ The tool will return:
 </use_mcp_tool>
 ```
 
+### Screenshots:
+![alt text](<Screenshot 2025-05-27 at 9.30.40 PM.png>)
+
 ## Error Handling
 
 The server provides detailed error messages for common scenarios:
