@@ -20,7 +20,7 @@ python3 -m pip install --upgrade pip
 
 # Install dependencies
 echo "Installing dependencies..."
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 echo "Starting Screener MCP server..."
 python3 server.py

@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 from pathlib import Path
 from mcp.server.fastmcp import FastMCP
-from jugaad_data.nse import NSELive
+# Removed unused jugaad_data import
 
 # Initialize FastMCP server
 mcp = FastMCP("screener")

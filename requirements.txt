@@ -1,3 +1,5 @@
 httpx
-beautifulsoup4
+bs4
 mcp
+pathlib
+jugaad_data
